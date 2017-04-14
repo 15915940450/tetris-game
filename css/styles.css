@@ -1,0 +1,15 @@
+@charset 'utf-8';
+
+#tetris_canvas{
+  background: #282c34;
+  margin: 50px auto 0;
+  display: block;
+}
+#upcoming_canvas{
+  background: #9dadcc;
+  display: block;
+  position: absolute;
+  left: 50%;
+  top:50px;
+  margin-left: 160px;
+}
