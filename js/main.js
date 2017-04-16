@@ -10,17 +10,18 @@ window.onload=function(){
     "Z":[[0,12,6,0],[2,6,4,0],[0,12,6,0],[2,6,4,0]]
   };
 
-  drawCeil(jsonAll.I,0);
+  drawCeil('tetris_canvas',jsonAll.I,0);
+  drawCeil('upcoming_canvas',jsonAll.I,0);
 };
 
-function drawCeil(arrCeil,x){
+function drawCeil(strIdCanvas,arrCeil,x){
   var numGrid=30; //每一格的宽度
-  var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
-  var ctx=eleUpcomingCanvas.getContext('2d');
+  var eleCanvas=document.getElementById(strIdCanvas);
+  var ctx=eleCanvas.getContext('2d');
   ctx.strokeStyle='#333';
   ctx.fillStyle='#fee300';
   for(var i=0;i<4;i++){
-    var ceil=arrCeil[x];
+    var ceil=arrCeil[x].slice();  //复制一个数组
 
     for(var j=3;j>=0;j--){
       if(ceil[i]>=Math.pow(2,j)){
