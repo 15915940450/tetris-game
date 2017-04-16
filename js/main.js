@@ -1,3 +1,4 @@
+// console.log(Math.pow(2,3));
 window.onload=function(){
   var jsonAll={
     "I":[[4,4,4,4],[0,0,15,0],[2,2,2,2],[0,15,0,0]],
@@ -9,35 +10,24 @@ window.onload=function(){
     "Z":[[0,12,6,0],[2,6,4,0],[0,12,6,0],[2,6,4,0]]
   };
 
-  drawCeil(jsonAll.Z,0);
+  drawCeil(jsonAll.I,0);
 };
 
 function drawCeil(arrCeil,x){
+  var numGrid=30; //每一格的宽度
   var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
   var ctx=eleUpcomingCanvas.getContext('2d');
   ctx.strokeStyle='#333';
   ctx.fillStyle='#fee300';
   for(var i=0;i<4;i++){
     var ceil=arrCeil[x];
-    if(ceil[i]>=8){
-      ctx.fillRect(0,30*i,30,30);
-      ctx.strokeRect(0,30*i,30,30);
-      ceil[i]-=8;
-    }
-    if(ceil[i]>=4){
-      ctx.fillRect(30,30*i,30,30);
-      ctx.strokeRect(30,30*i,30,30);
-      ceil[i]-=4;
-    }
-    if(ceil[i]>=2){
-      ctx.fillRect(30*2,30*i,30,30);
-      ctx.strokeRect(30*2,30*i,30,30);
-      ceil[i]-=2;
-    }
-    if(ceil[i]>=1){
-      ctx.fillRect(30*3,30*i,30,30);
-      ctx.strokeRect(30*3,30*i,30,30);
-      ceil[i]-=1;
+
+    for(var j=3;j>=0;j--){
+      if(ceil[i]>=Math.pow(2,j)){
+        ctx.fillRect(numGrid*(3-j),numGrid*i,numGrid,numGrid);
+        ctx.strokeRect(numGrid*(3-j),numGrid*i,numGrid,numGrid);
+        ceil[i]-=Math.pow(2,j);
+      }
     }
   }
 }
