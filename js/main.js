@@ -19,20 +19,29 @@ window.onload=function(){
   var numHeightCanvas=numGrid*numAllRows;
   var objKeys={
     up:38,
+    left:37,
     right:39,
     down:40,
     start:53
   };
 
+  //ctx  CanvasRenderingContext2D
+  var eleCanvas=document.getElementById('tetris_canvas');
+  var ctx=eleCanvas.getContext('2d');
+  var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
+  var ctxUpcoming=eleUpcomingCanvas.getContext('2d');
+
 /*
-*全局變量 strLetter,TF,strNextLetter,numNextTF,unitY,
+*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,
 */
+// down所需
   var strLetter='L';  //strLetter=strNextLetter;
   var TF=0; //TF=numNextTF;
   var strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
   var numNextTF=Math.floor(Math.random()*4);
   var unitX=3;  //中間位置
   var unitY=0;
+// 重置遊戲
   var container=[]; //container[x] container[x][y] 代表x列y行的格子
   for(var i=0;i<10;i++){
     container[i]=[];
@@ -41,11 +50,6 @@ window.onload=function(){
     }
   }
 
-  //ctx  CanvasRenderingContext2D
-  var eleCanvas=document.getElementById('tetris_canvas');
-  var ctx=eleCanvas.getContext('2d');
-  var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
-  var ctxUpcoming=eleUpcomingCanvas.getContext('2d');
 
 //=======================================functions
   /*
@@ -104,9 +108,10 @@ window.onload=function(){
 *func:move
   */
   function move(dir){
+    var unitXpi,unitYpi;
     switch (dir) {
       case 'down':
-        var unitYpi=unitY+1;
+        unitYpi=unitY+1;
         if(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitYpi)){
           //Y距離加加
           unitY=unitYpi;
@@ -121,7 +126,8 @@ window.onload=function(){
             container[unitX1][unitY1]=strLetter;
           });
           // console.log(JSON.stringify(container));
-          //初始化參數,設置下一個
+          //初始化參數,設置下一個（6個變量）
+          unitX=3;
           unitY=0;
           strLetter=strNextLetter;
           TF=numNextTF;
@@ -132,6 +138,26 @@ window.onload=function(){
           drawCeil(ctx,strLetter,TF,unitX,unitY);
           //預測窗口圖形
           drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
+        }
+      break;
+      case 'left':
+        unitXpi=unitX-1;
+        if(checkWhetherCanOperateOrNot(strLetter,TF,unitXpi,unitY)){
+          unitX=unitXpi;
+          //繪製
+          clearAll();
+          drawContainer();
+          drawCeil(ctx,strLetter,TF,unitX,unitY);
+        }
+      break;
+      case 'right':
+        unitXpi=unitX+1;
+        if(checkWhetherCanOperateOrNot(strLetter,TF,unitXpi,unitY)){
+          unitX=unitXpi;
+          //繪製
+          clearAll();
+          drawContainer();
+          drawCeil(ctx,strLetter,TF,unitX,unitY);
         }
       break;
       default:
@@ -195,6 +221,7 @@ window.onload=function(){
   */
   document.onkeydown=function(ev){
     // ev.preventDefault();
+    // console.log(ev.keyCode);
     switch (ev.keyCode) {
       case objKeys.up:
         rotate();
@@ -202,8 +229,14 @@ window.onload=function(){
       case objKeys.down:
         move('down');
       break;
+      case objKeys.left:
+        move('left');
+      break;
+      case objKeys.right:
+        move('right');
+      break;
       case objKeys.start:
-        start();
+        // start();
       break;
       default:
         // console.log(ev.keyCode);
