@@ -108,6 +108,7 @@ window.onload=function(){
   }
   function autoMoveDown(){
     var unitYpi=unitY+1;
+    //檢查是否可以下移
     if(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitYpi)){
       //Y距離加加
       unitY=unitYpi;
@@ -132,7 +133,7 @@ window.onload=function(){
       numNextTF=Math.floor(Math.random()*4);
 
       // console.log(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY));
-      //遊戲結束
+      //檢查下一個方塊是否有空間生成，即遊戲是否結束
       if(!checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY)){
         gameOver();
       }
@@ -143,37 +144,39 @@ window.onload=function(){
       drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
     }
   }
+  function dropRapidly(){
+    for(var i=0;i<numAllRows;i++){
+      var unitYpi=unitY+i;
+      if(!checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitYpi)){
+        // console.log(i);
+        unitY=unitYpi-1;
+        //繪製
+        clearAll();
+        drawContainer();
+        drawCeil(ctx,strLetter,TF,unitX,unitY);
+        //到達底部，繪製下一個
+        autoMoveDown();
+        break;
+      }
+    }
+  }
   /*
-*func:move
+*func:move(left or right)
   */
   function move(dir){
-    var unitXpi,unitYpi;
-    switch (dir) {
-      case 'down':
+    var unitXpi;
+    if(dir==='left'){
+      unitXpi=unitX-1;
+    }else if(dir==='right') {
+      unitXpi=unitX+1;
+    }
 
-      break;
-      case 'left':
-        unitXpi=unitX-1;
-        if(checkWhetherCanOperateOrNot(strLetter,TF,unitXpi,unitY)){
-          unitX=unitXpi;
-          //繪製
-          clearAll();
-          drawContainer();
-          drawCeil(ctx,strLetter,TF,unitX,unitY);
-        }
-      break;
-      case 'right':
-        unitXpi=unitX+1;
-        if(checkWhetherCanOperateOrNot(strLetter,TF,unitXpi,unitY)){
-          unitX=unitXpi;
-          //繪製
-          clearAll();
-          drawContainer();
-          drawCeil(ctx,strLetter,TF,unitX,unitY);
-        }
-      break;
-      default:
-
+    if(checkWhetherCanOperateOrNot(strLetter,TF,unitXpi,unitY)){
+      unitX=unitXpi;
+      //繪製
+      clearAll();
+      drawContainer();
+      drawCeil(ctx,strLetter,TF,unitX,unitY);
     }
   }
   /*
@@ -239,28 +242,28 @@ window.onload=function(){
   */
   document.onkeydown=function(ev){
     // ev.preventDefault();
-    if(bOver){
-      return false;
+    if(!bOver){
+      switch (ev.keyCode) {
+        case objKeys.up:
+          tform();
+        break;
+        case objKeys.down:
+          dropRapidly();
+        break;
+        case objKeys.left:
+          move('left');
+        break;
+        case objKeys.right:
+          move('right');
+        break;
+        case objKeys.start:
+          // start();
+        break;
+        default:
+          console.log(ev.keyCode);
+      }
     }
-    switch (ev.keyCode) {
-      case objKeys.up:
-        tform();
-      break;
-      case objKeys.down:
-        move('down');
-      break;
-      case objKeys.left:
-        move('left');
-      break;
-      case objKeys.right:
-        move('right');
-      break;
-      case objKeys.start:
-        // start();
-      break;
-      default:
-        // console.log(ev.keyCode);
-    }
+
   };
 
 
