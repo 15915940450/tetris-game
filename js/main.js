@@ -43,7 +43,7 @@ var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,bOver,Timer;
 *初始化（重置）俄羅斯方塊遊戲
 */
 function initTetris(){
-  strLetter='L';  //strLetter=strNextLetter;
+  strLetter='T';  //strLetter=strNextLetter;
   TF=0; //TF=numNextTF;
   strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
   numNextTF=Math.floor(Math.random()*4);
@@ -230,8 +230,15 @@ function initTetris(){
     ctx.translate(0.5, 0.5);  //图变清脆
 
     doWithCeilXY(strLetter,TF,unitX,unitY,function(unitX1,unitY1){
-      ctx.fillRect(numGrid*unitX1,numGrid*unitY1,numGrid,numGrid);
-      ctx.strokeRect(numGrid*unitX1,numGrid*unitY1,numGrid,numGrid);
+      if(ctx.canvas.id==='upcoming_canvas'){
+        // ctx.clearRect(0,0,121,121);
+        ctx.fillRect(30*unitX1,30*unitY1,30,30);
+        ctx.strokeRect(30*unitX1,30*unitY1,30,30);
+      }else{
+        ctx.fillRect(numGrid*unitX1,numGrid*unitY1,numGrid,numGrid);
+        ctx.strokeRect(numGrid*unitX1,numGrid*unitY1,numGrid,numGrid);
+      }
+
     });
 
     ctx.translate(-0.5, -0.5);
