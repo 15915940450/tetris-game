@@ -13,10 +13,10 @@ window.onload=function(){
   };
   //常量
   var numGrid=30; //每一格的宽度
-  var numAllCols=10;
-  var numAllRows=18;
-  var numWidthCanvas=numGrid*numAllCols;
-  var numHeightCanvas=numGrid*numAllRows;
+  var numWidthCanvas=300;
+  var numHeightCanvas=540;
+  var numAllCols=numWidthCanvas/numGrid;
+  var numAllRows=numHeightCanvas/numGrid;
   var objKeys={
     up:38,
     left:37,
@@ -45,9 +45,9 @@ window.onload=function(){
   var unitY=0;
 // 重置遊戲
   var container=[]; //container[x] container[x][y] 代表x列y行的格子
-  for(var i=0;i<10;i++){
+  for(var i=0;i<numAllCols;i++){
     container[i]=[];
-    for(var j=0;j<18;j++){
+    for(var j=0;j<numAllRows;j++){
       container[i][j]='';
     }
   }
@@ -91,9 +91,9 @@ window.onload=function(){
     ctx.clearRect(0,0,numWidthCanvas+2,numHeightCanvas+2);
   }
   /*
-*func:rotate
+*func:tform,autoMoveDown
   */
-  function rotate(){
+  function tform(){
     var TFpi=TF+1;
     if(TFpi>3){
       TFpi=0;
@@ -106,6 +106,43 @@ window.onload=function(){
       drawCeil(ctx,strLetter,TF,unitX,unitY);
     }
   }
+  function autoMoveDown(){
+    var unitYpi=unitY+1;
+    if(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitYpi)){
+      //Y距離加加
+      unitY=unitYpi;
+      //繪製
+      clearAll();
+      drawContainer();
+      drawCeil(ctx,strLetter,TF,unitX,unitY);
+    }else{
+      //到達底部
+      //修改二維數組Container的值
+      doWithCeilXY(strLetter,TF,unitX,unitY,function(unitX1,unitY1){
+        container[unitX1][unitY1]=strLetter;
+      });
+
+      // console.log(JSON.stringify(container));
+      //初始化參數,設置下一個（6個變量）
+      unitX=3;
+      unitY=0;
+      strLetter=strNextLetter;
+      TF=numNextTF;
+      strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
+      numNextTF=Math.floor(Math.random()*4);
+
+      // console.log(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY));
+      //遊戲結束
+      if(!checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY)){
+        gameOver();
+      }
+
+      //繪製，此刻不需要清空畫布，直接畫下一個
+      drawCeil(ctx,strLetter,TF,unitX,unitY);
+      //預測窗口圖形
+      drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
+    }
+  }
   /*
 *func:move
   */
@@ -113,42 +150,7 @@ window.onload=function(){
     var unitXpi,unitYpi;
     switch (dir) {
       case 'down':
-        unitYpi=unitY+1;
-        if(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitYpi)){
-          //Y距離加加
-          unitY=unitYpi;
-          //繪製
-          clearAll();
-          drawContainer();
-          drawCeil(ctx,strLetter,TF,unitX,unitY);
-        }else{
-          //到達底部
-          //修改二維數組Container的值
-          doWithCeilXY(strLetter,TF,unitX,unitY,function(unitX1,unitY1){
-            container[unitX1][unitY1]=strLetter;
-          });
 
-          // console.log(JSON.stringify(container));
-          //初始化參數,設置下一個（6個變量）
-          unitX=3;
-          unitY=0;
-          strLetter=strNextLetter;
-          TF=numNextTF;
-          strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
-          numNextTF=Math.floor(Math.random()*4);
-
-          // console.log(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY));
-          //遊戲結束
-          if(!checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY)){
-            gameOver();
-          }
-
-
-          //繪製，此刻不需要清空畫布，直接畫下一個
-          drawCeil(ctx,strLetter,TF,unitX,unitY);
-          //預測窗口圖形
-          drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
-        }
       break;
       case 'left':
         unitXpi=unitX-1;
@@ -223,7 +225,7 @@ window.onload=function(){
   function start(){
     bOver=false;
     Timer=window.setInterval(function(){
-      move('down');
+      autoMoveDown();
     },1000);
   }
   function gameOver(){
@@ -242,7 +244,7 @@ window.onload=function(){
     }
     switch (ev.keyCode) {
       case objKeys.up:
-        rotate();
+        tform();
       break;
       case objKeys.down:
         move('down');
