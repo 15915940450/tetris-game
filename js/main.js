@@ -30,6 +30,8 @@ window.onload=function(){
   var ctx=eleCanvas.getContext('2d');
   var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
   var ctxUpcoming=eleUpcomingCanvas.getContext('2d');
+  //遊戲結束
+  var bOver=false;
 
 /*
 *全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,
@@ -125,6 +127,7 @@ window.onload=function(){
           doWithCeilXY(strLetter,TF,unitX,unitY,function(unitX1,unitY1){
             container[unitX1][unitY1]=strLetter;
           });
+
           // console.log(JSON.stringify(container));
           //初始化參數,設置下一個（6個變量）
           unitX=3;
@@ -133,6 +136,13 @@ window.onload=function(){
           TF=numNextTF;
           strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
           numNextTF=Math.floor(Math.random()*4);
+
+          // console.log(checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY));
+          //遊戲結束
+          if(!checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY)){
+            gameOver();
+          }
+
 
           //繪製，此刻不需要清空畫布，直接畫下一個
           drawCeil(ctx,strLetter,TF,unitX,unitY);
@@ -206,13 +216,19 @@ window.onload=function(){
     ctx.translate(-0.5, -0.5);
   }
   /*
-*func:start
+*func:start,gameOver
   **每次向下移動一格
   */
+  var Timer;
   function start(){
-    var Timer=window.setInterval(function(){
+    bOver=false;
+    Timer=window.setInterval(function(){
       move('down');
     },1000);
+  }
+  function gameOver(){
+    window.clearInterval(Timer);
+    bOver=true;
   }
 
 //=============================events
@@ -221,7 +237,9 @@ window.onload=function(){
   */
   document.onkeydown=function(ev){
     // ev.preventDefault();
-    // console.log(ev.keyCode);
+    if(bOver){
+      return false;
+    }
     switch (ev.keyCode) {
       case objKeys.up:
         rotate();
