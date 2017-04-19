@@ -139,7 +139,7 @@ function initTetris(){
         container[unitX1][unitY1]=strLetter;
       });
 
-      // console.log(JSON.stringify(container));
+      console.log(JSON.stringify(container));
       //初始化參數,設置下一個（6個變量）
       unitX=(numAllCols-4)/2;
       unitY=0;
@@ -165,12 +165,8 @@ function initTetris(){
       var unitYpi=unitY+i;
       if(!checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitYpi)){
         // console.log(i);
-        unitY=unitYpi-1;
-        //繪製
-        clearAll();
-        drawContainer();
-        drawCeil(ctx,strLetter,TF,unitX,unitY);
-        //到達底部，繪製下一個
+        unitY=unitYpi-2;
+        //到達倒數第二行，即中間省略了繪製n多行，再自動往下走一行
         autoMoveDown();
         break;
       }
