@@ -33,9 +33,9 @@ window.onload=function(){
 
 
 /*
-*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,Timer
+*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,bOver,Timer
 */
-var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,Timer;
+var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,bOver,Timer;
 
 
 //=======================================functions
@@ -47,7 +47,7 @@ function initTetris(){
   TF=0; //TF=numNextTF;
   strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
   numNextTF=Math.floor(Math.random()*4);
-  unitX=3;  //中間位置
+  unitX=(numAllCols-4)/2;  //中間位置
   unitY=0;
   container=[]; //container[x] container[x][y] 代表x列y行的格子
   for(var i=0;i<numAllCols;i++){
@@ -56,8 +56,9 @@ function initTetris(){
       container[i][j]='';
     }
   }
-  //遊戲進行中
+  //遊戲狀態
   bIng=false;
+  bOver=false;
   Timer=null;
 
   /*
@@ -67,7 +68,7 @@ function initTetris(){
   drawCeil(ctx,strLetter,TF,unitX,unitY);
   drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
 
-  // start();
+  start();
 }
   /*
 *func:doWithCeilXY
@@ -140,7 +141,7 @@ function initTetris(){
 
       // console.log(JSON.stringify(container));
       //初始化參數,設置下一個（6個變量）
-      unitX=3;
+      unitX=(numAllCols-4)/2;
       unitY=0;
       strLetter=strNextLetter;
       TF=numNextTF;
@@ -252,7 +253,7 @@ function initTetris(){
   }
   function gameOver(){
     pause();
-    initTetris();
+    bOver=true;
   }
 //=============================events
   /*
@@ -276,16 +277,22 @@ function initTetris(){
         break;
 
         default:
-          console.log(ev.keyCode);
+          // console.log(ev.keyCode);
       }
     }
     //開始，暫停
     if(ev.keyCode===objKeys.start){
       if(!bIng){
-        start();
+        if(bOver){
+          initTetris();
+        }else{
+          start();
+        }
       }else{
         pause();
       }
+
+
     }
   };
 //=============================end of events
