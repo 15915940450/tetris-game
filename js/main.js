@@ -30,30 +30,45 @@ window.onload=function(){
   var ctx=eleCanvas.getContext('2d');
   var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
   var ctxUpcoming=eleUpcomingCanvas.getContext('2d');
-  //遊戲結束
-  var bOver=false;
+
 
 /*
-*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,
+*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,Timer
 */
-// down所需
-  var strLetter='L';  //strLetter=strNextLetter;
-  var TF=0; //TF=numNextTF;
-  var strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
-  var numNextTF=Math.floor(Math.random()*4);
-  var unitX=3;  //中間位置
-  var unitY=0;
-// 重置遊戲
-  var container=[]; //container[x] container[x][y] 代表x列y行的格子
+var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,Timer;
+
+
+//=======================================functions
+/*
+*初始化（重置）俄羅斯方塊遊戲
+*/
+function initTetris(){
+  strLetter='L';  //strLetter=strNextLetter;
+  TF=0; //TF=numNextTF;
+  strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
+  numNextTF=Math.floor(Math.random()*4);
+  unitX=3;  //中間位置
+  unitY=0;
+  container=[]; //container[x] container[x][y] 代表x列y行的格子
   for(var i=0;i<numAllCols;i++){
     container[i]=[];
     for(var j=0;j<numAllRows;j++){
       container[i][j]='';
     }
   }
+  //遊戲進行中
+  bIng=false;
+  Timer=null;
 
+  /*
+  *初始繪製FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+  */
+  clearAll();
+  drawCeil(ctx,strLetter,TF,unitX,unitY);
+  drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
 
-//=======================================functions
+  // start();
+}
   /*
 *func:doWithCeilXY
   **strLetter:形状所使用的字母
@@ -221,28 +236,31 @@ window.onload=function(){
     ctx.translate(-0.5, -0.5);
   }
   /*
-*func:start,gameOver
+*func:start,pause,gameOver,(全局變量Timer)
   **每次向下移動一格
   */
-  var Timer;
   function start(){
-    bOver=false;
+    window.clearInterval(Timer);
+    bIng=true;
     Timer=window.setInterval(function(){
       autoMoveDown();
     },1000);
   }
-  function gameOver(){
+  function pause(){
     window.clearInterval(Timer);
-    bOver=true;
+    bIng=false;
   }
-
+  function gameOver(){
+    pause();
+    initTetris();
+  }
 //=============================events
   /*
   *事件
   */
   document.onkeydown=function(ev){
     // ev.preventDefault();
-    if(!bOver){
+    if(bIng){
       switch (ev.keyCode) {
         case objKeys.up:
           tform();
@@ -256,24 +274,22 @@ window.onload=function(){
         case objKeys.right:
           move('right');
         break;
-        case objKeys.start:
-          // start();
-        break;
+
         default:
           console.log(ev.keyCode);
       }
     }
-
+    //開始，暫停
+    if(ev.keyCode===objKeys.start){
+      if(!bIng){
+        start();
+      }else{
+        pause();
+      }
+    }
   };
+//=============================end of events
 
-
-
-  /*
-  *初始繪製FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-  */
-  clearAll();
-  drawCeil(ctx,strLetter,TF,unitX,unitY);
-  drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
-
-  start();
+  initTetris();
+//end of window onload
 };
