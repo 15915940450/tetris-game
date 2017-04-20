@@ -20,40 +20,5 @@
     </div>
     <script src="js/jquery-3.0.0.min.js"></script>
     <script src="js/main.js"></script>
-    <script type="text/javascript">
-    //just for test
-    var arr=[['0',2,3],[4,5,'']];
-    function modifyContainerWhenRowFull(){
-      // var tmp=[];
-      var bDeleteRow=[];
-      for(var i=0;i<3;i++){
-        bDeleteRow[i]=true;
-      }
-      for(var i=0;i<2;i++){
-        for(var j=0;j<3;j++){
-          if(!arr[i][j]){
-            bDeleteRow[j]=false;
-          }
-        }
-      }
-      // console.log(bDeleteRow);  // [false, true, true]
-      for(var i=0;i<bDeleteRow.length;i++){
-        if(bDeleteRow[i]){
-          for(var j=0;j<2;j++){
-            arr[j].splice(i,1);
-            arr[j].unshift('');
-            // console.log(arr[j].length);
-          }
-        }
-      }
-
-      // console.log(arr);
-      // return tmp;
-    }
-    var arr2=modifyContainerWhenRowFull();
-    console.log(JSON.stringify(arr));
-    // console.log(JSON.stringify(arr2));
-    //[["","","","","","","","","","","","","","","","","O","O"],["","","","","","","","","","","","","","","","T","O","O"],["","","","","","","","","","","","","","","","T","T",""],["","","","","","","","","","","","","","","","T","T",""],["","","","","","","","","","","","","","","Z","Z","T","T"],["","","","","","","","","","","","","","Z","Z","","T",""],["","","","","","","","","","","","","","","","","T",""],["","","","","","","","","","","","","","","","","T","T"],["","","","","","","","","","","","","","","","","T","J"],["","","","","","","","","","","","","","","","J","J","J"]]
-    </script>
 </body>
 </html>

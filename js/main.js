@@ -122,6 +122,7 @@ function initTetris(){
       drawCeil(ctx,strLetter,TF,unitX,unitY);
     }
   }
+  //最重要的函數autoMoveDown
   function autoMoveDown(){
     var unitYpi=unitY+1;
     //檢查是否可以下移
@@ -133,13 +134,14 @@ function initTetris(){
       drawContainer();
       drawCeil(ctx,strLetter,TF,unitX,unitY);
     }else{
-      //到達底部
+      //無法繼續下移
       //修改二維數組Container的值
       doWithCeilXY(strLetter,TF,unitX,unitY,function(unitX1,unitY1){
         container[unitX1][unitY1]=strLetter;
       });
-
-      console.log(JSON.stringify(container));
+      //消除行
+      modifyContainerWhenRowFull();
+      // console.log(JSON.stringify(container));
       //初始化參數,設置下一個（6個變量）
       unitX=(numAllCols-4)/2;
       unitY=0;
@@ -154,7 +156,9 @@ function initTetris(){
         gameOver();
       }
 
-      //繪製，此刻不需要清空畫布，直接畫下一個
+      //繪製
+      clearAll();
+      drawContainer();
       drawCeil(ctx,strLetter,TF,unitX,unitY);
       //預測窗口圖形
       drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
@@ -189,6 +193,32 @@ function initTetris(){
       clearAll();
       drawContainer();
       drawCeil(ctx,strLetter,TF,unitX,unitY);
+    }
+  }
+  /*
+*func:modifyContainerWhenRowFull
+  */
+  function modifyContainerWhenRowFull(){
+    var bDeleteRow=[];
+    for(var i=0;i<numAllRows;i++){
+      bDeleteRow[i]=true;
+    }
+    for(i=0;i<numAllCols;i++){
+      for(var j=0;j<numAllRows;j++){
+        if(!container[i][j]){
+          bDeleteRow[j]=false;
+        }
+      }
+    }
+    // console.log(bDeleteRow.length===numAllRows);  //總共的行數
+    for(i=0;i<numAllRows;i++){
+      if(bDeleteRow[i]){
+        for(var k=0;k<numAllCols;k++){
+          //刪一個，再添一個container[k]數組長度不變
+          container[k].splice(i,1);
+          container[k].unshift('');
+        }
+      }
     }
   }
   /*
