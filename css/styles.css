@@ -14,3 +14,13 @@
   margin-left: 160px;
   padding:10px;
 }
+#score{
+  position: absolute;
+  left: 50%;
+  top:220px;
+  margin-left: 160px;
+  padding:10px;
+}
+#score p strong{
+  border-bottom: 1px solid #0E0E0E;
+}

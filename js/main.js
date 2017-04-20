@@ -30,12 +30,13 @@ window.onload=function(){
   var ctx=eleCanvas.getContext('2d');
   var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
   var ctxUpcoming=eleUpcomingCanvas.getContext('2d');
+  var eleScore=document.querySelector('#score p strong');
 
 
 /*
-*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,bOver,Timer
+*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,Timer,numScore
 */
-var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,container,bIng,bOver,Timer;
+var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,Timer,numScore;
 
 
 //=======================================functions
@@ -49,17 +50,19 @@ function initTetris(){
   numNextTF=Math.floor(Math.random()*4);
   unitX=(numAllCols-4)/2;  //中間位置
   unitY=0;
-  container=[]; //container[x] container[x][y] 代表x列y行的格子
+  arr2Dcontainer=[]; //arr2Dcontainer[x] arr2Dcontainer[x][y] 代表x列y行的格子
   for(var i=0;i<numAllCols;i++){
-    container[i]=[];
+    arr2Dcontainer[i]=[];
     for(var j=0;j<numAllRows;j++){
-      container[i][j]='';
+      arr2Dcontainer[i][j]='';
     }
   }
   //遊戲狀態
   bIng=false;
   bOver=false;
   Timer=null;
+  //計分
+  numScore=0;
 
   /*
   *初始繪製FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -67,6 +70,9 @@ function initTetris(){
   clearAll();
   drawCeil(ctx,strLetter,TF,unitX,unitY);
   drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
+
+  //DOM
+  eleScore.innerHTML=numScore;
 
   start();
 }
@@ -94,7 +100,7 @@ function initTetris(){
   function checkWhetherCanOperateOrNot(strLetter,TF,unitX,unitY){
     var bResult=true;
     doWithCeilXY(strLetter,TF,unitX,unitY,function(unitX1,unitY1){
-      if((unitX1<0) || (unitX1>=numAllCols) || (unitY1<0) || (unitY1>=numAllRows) || container[unitX1][unitY1]){
+      if((unitX1<0) || (unitX1>=numAllCols) || (unitY1<0) || (unitY1>=numAllRows) || arr2Dcontainer[unitX1][unitY1]){
         bResult=false;
       }
     });
@@ -135,13 +141,13 @@ function initTetris(){
       drawCeil(ctx,strLetter,TF,unitX,unitY);
     }else{
       //無法繼續下移
-      //修改二維數組Container的值
+      //修改二維數組arr2Dcontainer的值
       doWithCeilXY(strLetter,TF,unitX,unitY,function(unitX1,unitY1){
-        container[unitX1][unitY1]=strLetter;
+        arr2Dcontainer[unitX1][unitY1]=strLetter;
       });
-      //消除行
-      modifyContainerWhenRowFull();
-      // console.log(JSON.stringify(container));
+      //消除行,加分？
+      modifyContainerAndScoreWhenRowFull();
+      // console.log(JSON.stringify(arr2Dcontainer));
       //初始化參數,設置下一個（6個變量）
       unitX=(numAllCols-4)/2;
       unitY=0;
@@ -162,6 +168,8 @@ function initTetris(){
       drawCeil(ctx,strLetter,TF,unitX,unitY);
       //預測窗口圖形
       drawCeil(ctxUpcoming,strNextLetter,numNextTF,0,0);
+      //加分
+      eleScore.innerHTML=numScore;
     }
   }
   function dropRapidly(){
@@ -196,42 +204,52 @@ function initTetris(){
     }
   }
   /*
-*func:modifyContainerWhenRowFull
+*func:modifyContainerAndScoreWhenRowFull
+*消除行，并加分
   */
-  function modifyContainerWhenRowFull(){
-    var bDeleteRow=[];
+  function modifyContainerAndScoreWhenRowFull(){
+    var arrDeleteRow=[];
+    var numRowDelete=0;
     for(var i=0;i<numAllRows;i++){
-      bDeleteRow[i]=true;
+      arrDeleteRow[i]=true;
     }
     for(i=0;i<numAllCols;i++){
       for(var j=0;j<numAllRows;j++){
-        if(!container[i][j]){
-          bDeleteRow[j]=false;
+        if(!arr2Dcontainer[i][j]){
+          arrDeleteRow[j]=false;
         }
       }
     }
-    // console.log(bDeleteRow.length===numAllRows);  //總共的行數
+    // console.log(arrDeleteRow);
+    // console.log(arrDeleteRow.length===numAllRows);  //總共的行數
     for(i=0;i<numAllRows;i++){
-      if(bDeleteRow[i]){
+      if(arrDeleteRow[i]){
+        //消除了幾行
+        numRowDelete++;
+        //修改二維數組
         for(var k=0;k<numAllCols;k++){
-          //刪一個，再添一個container[k]數組長度不變
-          container[k].splice(i,1);
-          container[k].unshift('');
+          //刪一個，再添一個，arr2Dcontainer[k]數組長度不變
+          arr2Dcontainer[k].splice(i,1);
+          arr2Dcontainer[k].unshift('');
         }
       }
+    }
+    // console.log(numRowDelete);  //0，1,2,3,4
+    if(numRowDelete){
+      numScore+=100*Math.pow(2,numRowDelete-1);
     }
   }
   /*
 *func:drawContainer
   */
   function drawContainer(){
-    // console.log(JSON.stringify(container));
+    // console.log(JSON.stringify(arr2Dcontainer));
     ctx.strokeStyle='#333';
     ctx.fillStyle='#fee300';
     ctx.translate(0.5, 0.5);  //图变清脆
     for(var i=0;i<numAllCols;i++){
       for(var j=0;j<numAllRows;j++){
-        if(container[i][j]){  //不是空字符串
+        if(arr2Dcontainer[i][j]){  //不是空字符串
           ctx.fillRect(numGrid*i,numGrid*j,numGrid,numGrid);
           ctx.strokeRect(numGrid*i,numGrid*j,numGrid,numGrid);
         }
