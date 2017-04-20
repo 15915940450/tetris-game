@@ -1,7 +1,21 @@
 @charset 'utf-8';
+body{
+  background: url("../img/TitanicBelfast_ZH-CN7528306628_1920x1080.jpg") no-repeat center center;
+  background-size: cover;
+}
+.white_mask{
+  background: rgba(255,255,255,0.6);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
 #tetris_wrap{
   padding-top: 30px;
   position: relative;
+  min-width: 1000px;
+  min-height: 600px;
 }
 #tetris_canvas{
   border: 2px solid #0E0E0E;
@@ -9,8 +23,8 @@
   margin: 0px auto;
   display: block;
 }
-#upcoming_canvas,#score{
-  background: #9dadcc;
+#upcoming_canvas,#score,#top{
+  /*background: #9dadcc;*/
   display: block;
   position: absolute;
   left: 50%;
@@ -22,13 +36,24 @@
 }
 #score{
   top:220px;
-  width: 141px;
-}
-#score p{
-  color: #F2F2F2;
+  width: 300px;
 }
 #score p strong{
-  font-size:1.5em;
+  font-size:5.5em;
   color: #F2F2F2;
-  border-bottom: 1px solid #F2F2F2;
+  text-shadow: 2px 2px 5px rgba(0,0,0,.9);
+  border-bottom: 1px solid #333;
+}
+#top{
+  display: none;
+  bottom:0px;
+  width: 141px;
+  min-height: 100px;
+  max-height: 300px;
+}
+#top table td{
+  color: #F2F2F2;
+}
+#top table td:first-child{
+  width: 20px;
 }

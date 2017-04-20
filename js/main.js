@@ -1,4 +1,11 @@
 window.onload=function(){
+  //分辨率過低
+  var numClientWidth=document.documentElement.clientWidth || document.body.clientWidth;
+  var numClientHeight=document.documentElement.clientHeight || document.body.clientHeight;
+  if(numClientWidth<1000 || numClientHeight<550){
+    document.write('分辨率過低!');
+    return false;
+  }
   /*
   *jsonAll
   */
@@ -311,7 +318,7 @@ function initTetris(){
   *事件
   */
   document.onkeydown=function(ev){
-    // ev.preventDefault();
+    ev.preventDefault();
     if(bIng){
       switch (ev.keyCode) {
         case objKeys.up:
