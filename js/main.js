@@ -39,12 +39,12 @@ window.onload=function(){
   var eleUpcomingCanvas=document.getElementById('upcoming_canvas');
   var ctxUpcoming=eleUpcomingCanvas.getContext('2d');
   var eleScore=document.querySelector('#score p strong');
-
+  var eleLevel=document.getElementById('level');
 
 /*
-*全局變量 Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore
+*全局變量 Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore,numLevel;
 */
-var Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore;
+var Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore,numLevel;
 
 
 //=======================================functions
@@ -72,6 +72,7 @@ function initTetris(){
 
   //計分
   numScore=0;
+  numLevel=2;
 
   /*
   *初始繪製FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -82,6 +83,7 @@ function initTetris(){
 
   //DOM
   eleScore.innerHTML=numScore;
+  eleLevel.innerHTML=1;
 
   start();
 }
@@ -155,7 +157,7 @@ function initTetris(){
         arr2Dcontainer[unitX1][unitY1]=strLetter;
       });
       //消除行,加分？
-      modifyContainerAndScoreWhenRowFull();
+      modifyContainerAndScoreAndLevelWhenRowFull();
       // console.log(JSON.stringify(arr2Dcontainer));
       //初始化參數,設置下一個（6個變量）
       unitX=Math.ceil((numAllCols-4)/2);
@@ -213,10 +215,10 @@ function initTetris(){
     }
   }
   /*
-*func:modifyContainerAndScoreWhenRowFull
+*func:modifyContainerAndScoreAndLevelWhenRowFull
 *消除行，并加分
   */
-  function modifyContainerAndScoreWhenRowFull(){
+  function modifyContainerAndScoreAndLevelWhenRowFull(){
     var arrDeleteRow=[];
     var numRowDelete=0;
     for(var i=0;i<numAllRows;i++){
@@ -246,6 +248,16 @@ function initTetris(){
     // console.log(numRowDelete);  //0，1,2,3,4
     if(numRowDelete){
       numScore+=100*Math.pow(2,numRowDelete-1);
+      //加速？
+      if(numScore>=10000*(numLevel)){
+        eleLevel.innerHTML=numLevel;
+        numLevel++;
+        if(numLevel>9){
+          numLevel=1;
+        }
+        pause();
+        start();
+      }
     }
   }
   /*
@@ -305,7 +317,7 @@ function initTetris(){
     bIng=true;
     Timer=window.setInterval(function(){
       autoMoveDown();
-    },1000);
+    },100*(10-numLevel));
   }
   function pause(){
     window.clearInterval(Timer);

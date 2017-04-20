@@ -90,13 +90,17 @@ a:hover#logo i,a.anim#logo i{
 }
 #score{
   top:220px;
-  width: 300px;
+  /*width: 350px;*/
 }
 #score p strong{
   font-size:5.5em;
   color: #F2F2F2;
   text-shadow: 2px 2px 5px rgba(0,0,0,.9);
   border-bottom: 1px solid #333;
+}
+#level{
+  color:#000;
+  margin: 0 5px;
 }
 #top{
   display: none;
