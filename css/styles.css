@@ -3,6 +3,60 @@ body{
   background: url("../img/TitanicBelfast_ZH-CN7528306628_1920x1080.jpg") no-repeat center center;
   background-size: cover;
 }
+
+a#logo{
+  position: absolute;
+  left: 90px;
+  top: 30px;
+  height: 50px;
+  display: block;
+  background: url("../img/tetris_logo.svg") no-repeat 0 center;
+  background-size: 50px 50px;
+  z-index: 9;
+  padding-left: 55px;
+  line-height: 50px;
+  color: #0E0E0E;
+  font-size: 13px;
+}
+a#logo span{
+  border-top: 1px solid #0E0E0E;
+  border-bottom: 1px solid #0E0E0E;
+  display: block;
+  height: 30px;
+  line-height: 28px;
+  margin-top:10px;
+}
+
+
+@keyframes rideonrails {
+  0%{
+    transform: translate(0,0);
+  }
+  100%{
+    transform: translate(105px,0);
+  }
+}
+a#logo i{
+  opacity: 0;
+  position: absolute;
+  left:55px;
+  transition: all 0.2s ease-out;
+  transform: translate(0,0);
+  border-top: 1px solid #FEE300;
+  width: 10px;
+  display: block;
+}
+a#logo i.up{
+  top:10px;
+}
+a#logo i.down{
+  bottom:10px;
+}
+a:hover#logo i,a.anim#logo i{
+  opacity: 1;
+  /*transform: translate(101px,0);*/
+  animation:rideonrails .9s linear infinite;
+}
 .white_mask{
   background: rgba(255,255,255,0.6);
   position: absolute;
@@ -57,3 +111,52 @@ body{
 #top table td:first-child{
   width: 20px;
 }
+
+footer{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #333;
+  height: 30px;
+  line-height: 30px;
+  width: 100%;
+}
+.footer{
+  color: #AAA;
+  text-align: right;
+  font-size: 11px;
+  padding-right: 10px;
+}
+.footer a{
+  color: #AAA;
+  position: relative;
+}
+.footer a:hover{
+  color: #FFF;
+}
+.footer a strong{
+  position: absolute;
+  right: 0;
+  bottom: 30px;
+  padding: 5px 10px;
+  border: 1px solid #333;
+  font-size: 15px;
+  display: block;
+  text-align: left;
+  line-height: 25px;
+  background: rgba(0,0,0,.33);
+  font-weight: 500;
+  display: none;
+}
+.footer a:hover strong{
+  display: block;
+}
+
+
+
+
+
+
+
+
+/*end*/

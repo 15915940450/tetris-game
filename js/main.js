@@ -3,7 +3,7 @@ window.onload=function(){
   var numClientWidth=document.documentElement.clientWidth || document.body.clientWidth;
   var numClientHeight=document.documentElement.clientHeight || document.body.clientHeight;
   if(numClientWidth<1000 || numClientHeight<550){
-    document.write('分辨率過低!');
+    document.write('分辨率過低!不支持手機端。');
     return false;
   }
   /*
@@ -29,7 +29,8 @@ window.onload=function(){
     left:37,
     right:39,
     down:40,
-    start:53
+    start:53,
+    F5:116
   };
 
   //ctx  CanvasRenderingContext2D
@@ -41,9 +42,9 @@ window.onload=function(){
 
 
 /*
-*全局變量 strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,Timer,numScore
+*全局變量 Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore
 */
-var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,Timer,numScore;
+var Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore;
 
 
 //=======================================functions
@@ -51,6 +52,7 @@ var strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,T
 *初始化（重置）俄羅斯方塊遊戲
 */
 function initTetris(){
+  Timer=null;
   strLetter='T';  //strLetter=strNextLetter;
   TF=0; //TF=numNextTF;
   strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
@@ -67,7 +69,7 @@ function initTetris(){
   //遊戲狀態
   bIng=false;
   bOver=false;
-  Timer=null;
+
   //計分
   numScore=0;
 
@@ -318,7 +320,6 @@ function initTetris(){
   *事件
   */
   document.onkeydown=function(ev){
-    ev.preventDefault();
     if(bIng){
       switch (ev.keyCode) {
         case objKeys.up:
@@ -333,12 +334,16 @@ function initTetris(){
         case objKeys.right:
           move('right');
         break;
+        case objKeys.F5:
+          // 遊戲當中禁止鍵盤F5刷新頁面
+          ev.preventDefault();
+        break;
 
         default:
           // console.log(ev.keyCode);
       }
     }
-    //開始，暫停
+    //開始，暫停(數字5)
     if(ev.keyCode===objKeys.start){
       if(!bIng){
         if(bOver){
