@@ -48,7 +48,7 @@ function initTetris(){
   TF=0; //TF=numNextTF;
   strNextLetter=Object.keys(jsonAll)[Math.floor(Math.random()*Object.keys(jsonAll).length)];
   numNextTF=Math.floor(Math.random()*4);
-  unitX=(numAllCols-4)/2;  //中間位置
+  unitX=Math.ceil((numAllCols-4)/2);  //中間位置
   unitY=0;
   arr2Dcontainer=[]; //arr2Dcontainer[x] arr2Dcontainer[x][y] 代表x列y行的格子
   for(var i=0;i<numAllCols;i++){
@@ -149,7 +149,7 @@ function initTetris(){
       modifyContainerAndScoreWhenRowFull();
       // console.log(JSON.stringify(arr2Dcontainer));
       //初始化參數,設置下一個（6個變量）
-      unitX=(numAllCols-4)/2;
+      unitX=Math.ceil((numAllCols-4)/2);
       unitY=0;
       strLetter=strNextLetter;
       TF=numNextTF;
@@ -289,7 +289,7 @@ function initTetris(){
   }
   /*
 *func:start,pause,gameOver,(全局變量Timer)
-  **每次向下移動一格
+  **start:每次向下移動一格,唯一的定時器
   */
   function start(){
     window.clearInterval(Timer);

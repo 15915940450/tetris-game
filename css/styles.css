@@ -1,26 +1,34 @@
 @charset 'utf-8';
-
+#tetris_wrap{
+  padding-top: 30px;
+  position: relative;
+}
 #tetris_canvas{
+  border: 2px solid #0E0E0E;
   background: #999;
-  margin: 0px auto 0;
+  margin: 0px auto;
   display: block;
 }
-#upcoming_canvas{
+#upcoming_canvas,#score{
   background: #9dadcc;
   display: block;
   position: absolute;
   left: 50%;
-  top:50px;
-  margin-left: 160px;
+  margin-left: 153px;
   padding:10px;
+}
+#upcoming_canvas{
+  top:30px;
 }
 #score{
-  position: absolute;
-  left: 50%;
   top:220px;
-  margin-left: 160px;
-  padding:10px;
+  width: 141px;
+}
+#score p{
+  color: #F2F2F2;
 }
 #score p strong{
-  border-bottom: 1px solid #0E0E0E;
+  font-size:1.5em;
+  color: #F2F2F2;
+  border-bottom: 1px solid #F2F2F2;
 }
