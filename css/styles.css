@@ -99,7 +99,7 @@ a:hover#logo i,a.anim#logo i{
   margin: 0px auto;
   display: block;
 }
-#upcoming_canvas,#score,#top,#introductions{
+#upcoming_canvas,#score,#introductions{
   display: block;
   position: absolute;
   left: 50%;
@@ -121,22 +121,40 @@ a:hover#logo i,a.anim#logo i{
 #level{
   color:#000;
   margin: 0 5px;
+  font-size: 1.5em;
 }
 #top{
-  display: none;
+  /*display: none;*/
   bottom:0px;
-  width: 141px;
+  width: 220px;
   min-height: 100px;
   max-height: 300px;
+  position: absolute;
+  left:121px;
+  top: 200px;
+  background: rgba(255,255,255,.1);
+  padding: 10px;
 }
-#top table td{
-  color: #F2F2F2;
+#top table{
+  width: 100%;
+}
+/*length:8*/
+#top table td,#top table th{
+  color: #1FB60A;
+  font-size: 13px;
+  padding: 5px 10px;
 }
 #top table td:first-child{
   width: 20px;
 }
+#top table td:last-child{
+  text-align: right;
+}
 #introductions{
-  bottom:50px;
+  top:490px;
+}
+#introductions p{
+  margin-bottom: 5px;
 }
 #introductions a{
   text-decoration: underline;

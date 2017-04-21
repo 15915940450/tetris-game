@@ -48,11 +48,13 @@ window.onload=function(){
   var ctxUpcoming=eleUpcomingCanvas.getContext('2d');
   var eleScore=document.querySelector('#score p strong');
   var eleLevel=document.getElementById('level');
+  var eleTopTbody=document.querySelector('#top table tbody');
+  var elePlayTimes=document.querySelector('#introductions p span');
 
 /*
-*全局變量 Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore,numLevel;
+*全局變量 Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore,numLevel,jsonTop,numPlayTimes;
 */
-var Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore,numLevel;
+var Timer,strLetter,TF,strNextLetter,numNextTF,unitX,unitY,arr2Dcontainer,bIng,bOver,numScore,numLevel,jsonTop,numPlayTimes;
 
 
 //=======================================functions
@@ -81,6 +83,13 @@ function initTetris(){
   //計分
   numScore=0;
   numLevel=2;
+  //排行榜
+  jsonTop=[
+    {"name":"fangxuecong","score":71500},
+    {"name":"author","score":109500},
+    {"name":"想你夜能寐","score":300}
+  ];
+  numPlayTimes=29;
 
   /*
   *初始繪製FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -92,9 +101,27 @@ function initTetris(){
   //DOM
   eleScore.innerHTML=numScore;
   eleLevel.innerHTML=1;
+  setEleTopTbodyInnerHTML();
+  elePlayTimes.innerHTML=(numPlayTimes?numPlayTimes:1);
 
   start();
 }
+/*
+func:setEleTopTbodyInnerHTML
+*/
+  function setEleTopTbodyInnerHTML(){
+    var arrTr=[];
+    jsonTop.sort(function(p1,p2){
+      return -(p1.score-p2.score);
+    });
+    if(jsonTop.length>8){
+      jsonTop.length=8;
+    }
+    for(var i=0;i<jsonTop.length;i++){
+      arrTr[i]='<tr><td>'+(i)+'</td><td>'+jsonTop[i].name+'</td><td>'+jsonTop[i].score+'</td></tr>';
+    }
+    eleTopTbody.innerHTML=arrTr.join('');
+  }
   /*
 *func:doWithCeilXY
   **strLetter:形状所使用的字母
@@ -394,7 +421,11 @@ function initTetris(){
     pause();
   };
   eleIntroBackToGame.onclick=function(){
-    start();
+    if(bOver){
+      initTetris();
+    }else{
+      start();
+    }
   };
 //=============================end of events
 
