@@ -1,3 +1,4 @@
+
 window.onload=function(){
   //分辨率過低
   var numClientWidth=document.documentElement.clientWidth || document.body.clientWidth;
@@ -5,7 +6,14 @@ window.onload=function(){
   if(numClientWidth<1000 || numClientHeight<550){
     document.write('分辨率過低!不支持手機端。');
     return false;
+  }else{
+    if(numClientHeight<606){
+      document.querySelector('footer').style.display='none';
+      document.querySelector('#tetris_wrap').style.padding='1px';
+      document.querySelector('#tetris_wrap').style.minHeight='540px';
+    }
   }
+  //======================================tetris
   /*
   *jsonAll
   */
@@ -318,19 +326,25 @@ function initTetris(){
     Timer=window.setInterval(function(){
       autoMoveDown();
     },100*(10-numLevel));
+    eleBlackMask.style.display='none';
+    eleIntroMask.style.display='none';
   }
   function pause(){
     window.clearInterval(Timer);
     bIng=false;
+    eleBlackMask.style.display='block';
+    eleIntroMask.style.display='block';
   }
   function gameOver(){
-    pause();
+    window.clearInterval(Timer);
+    bIng=false;
     bOver=true;
   }
 //=============================events
   /*
   *事件
   */
+  // 键盘
   document.onkeydown=function(ev){
     if(bIng){
       switch (ev.keyCode) {
@@ -370,8 +384,24 @@ function initTetris(){
 
     }
   };
+  // 游戏说明
+  var eleIntroA=document.querySelector('#introductions a');
+  var eleBlackMask=document.querySelector('.black_mask');
+  var eleIntroMask=document.querySelector('.introductions_mask');
+  var eleIntroBackToGame=document.querySelector('.introductions_mask p a');
+
+  eleIntroA.onclick=function(){
+    pause();
+  };
+  eleIntroBackToGame.onclick=function(){
+    start();
+  };
 //=============================end of events
 
   initTetris();
+//end of tetris
+
+
+
 //end of window onload
 };

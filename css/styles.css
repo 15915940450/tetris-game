@@ -3,7 +3,41 @@ body{
   background: url("../img/TitanicBelfast_ZH-CN7528306628_1920x1080.jpg") no-repeat center center;
   background-size: cover;
 }
-
+/*mask*/
+.white_mask,.black_mask,.introductions_mask{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+/*white_mask zInit*/
+.white_mask{
+  background: #EEE;
+  opacity: 0.6;
+}
+html.rgba .white_mask{
+  background: rgba(255,255,255,0.6);
+  opacity: 1;
+}
+/*keyframes rideonrails*/
+@-webkit-keyframes rideonrails {
+  0%{
+    -webkit-transform: translate(0,0);
+  }
+  100%{
+    -webkit-transform: translate(105px,0);
+  }
+}
+@keyframes rideonrails {
+  0%{
+    transform: translate(0,0);
+  }
+  100%{
+    transform: translate(105px,0);
+  }
+}
+/*logo*/
 a#logo{
   position: absolute;
   left: 90px;
@@ -26,23 +60,7 @@ a#logo span{
   line-height: 28px;
   margin-top:10px;
 }
-
-@-webkit-keyframes rideonrails {
-  0%{
-    -webkit-transform: translate(0,0);
-  }
-  100%{
-    -webkit-transform: translate(105px,0);
-  }
-}
-@keyframes rideonrails {
-  0%{
-    transform: translate(0,0);
-  }
-  100%{
-    transform: translate(105px,0);
-  }
-}
+/*keyframes*/
 a#logo i{
   opacity: 0;
   position: absolute;
@@ -61,25 +79,19 @@ a#logo i.up{
 a#logo i.down{
   bottom:10px;
 }
+/*动画*/
 a:hover#logo i,a.anim#logo i{
   opacity: 1;
   /*transform: translate(101px,0);*/
   -webkit-animation:rideonrails .9s linear infinite;
   animation:rideonrails .9s linear infinite;
 }
-.white_mask{
-  background: rgba(255,255,255,0.6);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
+/*俄羅斯方塊*/
 #tetris_wrap{
   padding-top: 30px;
   position: relative;
   min-width: 1000px;
-  min-height: 600px;
+  min-height: 575px;
 }
 #tetris_canvas{
   border: 2px solid #0E0E0E;
@@ -87,8 +99,7 @@ a:hover#logo i,a.anim#logo i{
   margin: 0px auto;
   display: block;
 }
-#upcoming_canvas,#score,#top{
-  /*background: #9dadcc;*/
+#upcoming_canvas,#score,#top,#introductions{
   display: block;
   position: absolute;
   left: 50%;
@@ -100,7 +111,6 @@ a:hover#logo i,a.anim#logo i{
 }
 #score{
   top:220px;
-  /*width: 350px;*/
 }
 #score p strong{
   font-size:5.5em;
@@ -125,7 +135,14 @@ a:hover#logo i,a.anim#logo i{
 #top table td:first-child{
   width: 20px;
 }
-
+#introductions{
+  bottom:50px;
+}
+#introductions a{
+  text-decoration: underline;
+  color: #1231EE;
+}
+/*頁腳*/
 footer{
   position: absolute;
   left: 0;
@@ -166,11 +183,46 @@ footer{
   display: block;
 }
 
-
-
-
-
-
-
+/*black_mask 初始不顯示 z100*/
+.black_mask{
+  display: none;
+  background:#0E0E0E;
+  opacity: 0.8;
+  z-index: 100;
+}
+html.rgba .black_mask{
+  background: rgba(0,0,0,.86);
+  opacity: 1;
+}
+/*introductions_mask 初始不顯示*/
+.introductions_mask{
+  display: none;
+  z-index:101;
+}
+.introductions_mask table{
+  width: 300px;
+  margin: 5% auto 0;
+}
+.introductions_mask table td{
+  font-size: 20px;
+  color: #FFF;
+}
+.introductions_mask table td:first-child{
+  width: 90px;
+  padding: 10px 5px;
+  text-align: center;
+}
+.introductions_mask p{
+  text-align: center;
+  margin-top: 30px;
+}
+.introductions_mask p a{
+  font-size: 18px;
+  color: #FEE300;
+  border: 1px solid #FEE300;
+  display: inline-block;
+  padding: 10px 20px;
+  margin-left: -100px;
+}
 
 /*end*/
